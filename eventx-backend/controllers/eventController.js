@@ -144,7 +144,11 @@ export const bookTicket = async (req, res) => {
     event.bookedSeats += 1;
     await event.save();
 
-    res.json({ seatNumber, qrCode });
+    res.json({
+  ticketId: event.tickets[event.tickets.length - 1]._id, // the last pushed ticket
+  seatNumber,
+  qrCodeData: qrCode,
+});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

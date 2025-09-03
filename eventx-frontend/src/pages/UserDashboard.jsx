@@ -117,15 +117,15 @@ export default function UserDashboard() {
       {activeTab === "tickets" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tickets.map((ticket) => (
-            <div key={ticket._id} className="border p-4 rounded shadow">
-              <h2 className="text-xl font-semibold">{ticket.event.title}</h2>
-              <p>Date: {new Date(ticket.event.date).toLocaleDateString()}</p>
-              <p>Seat: {ticket.seat}</p>
-              <div className="mt-4 flex justify-center">
-                <QRCodeCanvas value={ticket.qrCode} size={150} />
-              </div>
-            </div>
-          ))}
+  <div key={ticket._id} className="border p-4 rounded shadow">
+    <h2 className="text-xl font-semibold">{ticket.event.title}</h2>
+    <p>Date: {new Date(ticket.event.date).toLocaleDateString()}</p>
+    <p>Seat: {ticket.seat}</p>
+    <div className="mt-4 flex justify-center">
+      <QRCodeCanvas value={ticket.qrCodeData} size={150} />
+    </div>
+  </div>
+))}
         </div>
       )}
 
@@ -181,7 +181,7 @@ export default function UserDashboard() {
               Seat: {bookingSuccess.seat}
             </p>
             <div className="mt-4 flex justify-center">
-              <QRCodeCanvas value={bookingSuccess.qrCode} size={200} />
+              <QRCodeCanvas value={bookingSuccess.qrCodeData} size={200} />
             </div>
             <button
               className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full"

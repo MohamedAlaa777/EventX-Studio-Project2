@@ -1,4 +1,3 @@
-// src/pages/Register.js
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,8 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user"); // default role is 'user'
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,12 +17,14 @@ export default function Register() {
         name,
         email,
         password,
-        role,
+        age,
+        gender,
       });
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.user.id);
       alert("Registration successful!");
-      navigate("/login"); // redirect to login page
+      navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
     }
@@ -36,6 +38,7 @@ export default function Register() {
       >
         <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
 
+        {/* Name */}
         <input
           className="border p-2 mb-4 w-full rounded"
           type="text"
@@ -45,6 +48,7 @@ export default function Register() {
           required
         />
 
+        {/* Email */}
         <input
           className="border p-2 mb-4 w-full rounded"
           type="email"
@@ -54,6 +58,7 @@ export default function Register() {
           required
         />
 
+        {/* Password */}
         <input
           className="border p-2 mb-4 w-full rounded"
           type="password"
@@ -63,15 +68,30 @@ export default function Register() {
           required
         />
 
+        {/* Age */}
+        <input
+          className="border p-2 mb-4 w-full rounded"
+          type="number"
+          placeholder="Age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          required
+        />
+
+        {/* Gender */}
         <select
           className="border p-2 mb-4 w-full rounded"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          required
         >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
         </select>
 
+        {/* Submit */}
         <button
           className="bg-green-500 text-white p-2 w-full rounded hover:bg-green-600 transition"
           type="submit"
@@ -79,6 +99,7 @@ export default function Register() {
           Register
         </button>
 
+        {/* Login Redirect */}
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <span
