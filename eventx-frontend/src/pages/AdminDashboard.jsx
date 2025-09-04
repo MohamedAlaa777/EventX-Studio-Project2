@@ -123,18 +123,26 @@ export default function AdminDashboard() {
   };
 
   const handleAllocateSeat = async (eventId) => {
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/events/allocate-seat",
-        { eventId, userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert(`Seat ${data.seatNumber} allocated successfully!`);
-    } catch (err) {
-      console.error("Error allocating seat:", err.response?.data || err.message);
-      alert("Failed to allocate seat");
-    }
-  };
+    console.log(eventId);
+    console.log(userId);
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/events/allocate-seat",
+      { eventId, userId }, // admin allocates for user
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // fix here
+        },
+      }
+    );
+
+    alert(`Seat ${data.seatNumber} allocated successfully!`);
+  } catch (err) {
+    console.error("Error allocating seat:", err.response?.data || err.message);
+    alert("Failed to allocate seat");
+  }
+};
+
 
   // Safely prepare chart data
   const ageData = {
@@ -266,6 +274,7 @@ export default function AdminDashboard() {
           <div className="mb-4">
             <p>Total Revenue: ${stats.revenue}</p>
             <p>Tickets Sold: {stats.ticketsSold}</p>
+            <p>Total Events: {events.length}</p>
           </div>
           <div className="flex gap-8">
             <div className="w-1/2">

@@ -15,24 +15,24 @@ import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Public routes for users
-router.get("/upcoming", protect, getUpcomingEvents); // must be before /:id
-router.get("/:id", protect, getEventById);
-router.post("/book", protect, bookTicket);
-router.get("/my-tickets", protect, getMyTickets);
+// ----- Public/User routes -----
+router.get("/upcoming", protect, getUpcomingEvents);   // static route
+router.get("/my-tickets", protect, getMyTickets);      // static route
+router.post("/book", protect, bookTicket);             // static route
 
-// Admin protected routes
-router.get("/", protect, isAdmin, getEvents);
+// ----- Admin routes -----
+router.get("/", protect, getEvents);
 router.post("/", protect, isAdmin, createEvent);
 router.put("/:id", protect, isAdmin, updateEvent);
 router.delete("/:id", protect, isAdmin, deleteEvent);
+
 router.post("/qrcode", protect, isAdmin, generateQRCode);
-// Admin allocates seat for any user
 router.post("/allocate-seat", protect, isAdmin, allocateSeat);
 
 router.get("/analytics/charts", protect, isAdmin, async (req, res) => {
   try {
     const bookings = await Booking.find().populate("user");
+
     const ageGroups = { "18-25": 0, "26-35": 0, "36-45": 0, "46+": 0 };
     const genderCounts = { male: 0, female: 0, other: 0 };
     const interestsCounts = {};
@@ -55,4 +55,8 @@ router.get("/analytics/charts", protect, isAdmin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// ----- Dynamic route (ALWAYS LAST) -----
+router.get("/:id", protect, getEventById);
+
 export default router;

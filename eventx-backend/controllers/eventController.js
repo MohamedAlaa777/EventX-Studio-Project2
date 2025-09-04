@@ -55,9 +55,10 @@ export const generateQRCode = async (req, res) => {
 
 // Allocate seat and generate ticket QR code
 export const allocateSeat = async (req, res) => {
+console.log("req.user:", req.user);
   try {
     const { eventId, userId: bodyUserId } = req.body;
-    const userId = bodyUserId || req.user._id; // admin can pass userId, users use token
+    const userId = bodyUserId || req.user.id; // admin can pass userId, users use token
 
     const event = await Event.findById(eventId);
     if (!event) {
@@ -77,8 +78,6 @@ export const allocateSeat = async (req, res) => {
     }
 
     if (!availableSeat) {
-        console.log("req.user:", req.user);
-console.log("body.userId:", bodyUserId);
       return res.status(400).json({ message: "No seats available" });
     }
 
@@ -124,7 +123,7 @@ export const getEventById = async (req, res) => {
 export const bookTicket = async (req, res) => {
   const { eventId, seatNumber } = req.body;
   const userId = req.user?._id;
-
+  console.log(userId);
   try {
     const event = await Event.findById(eventId);
     if (!event) return res.status(404).json({ message: "Event not found" });
@@ -160,21 +159,16 @@ export const getMyTickets = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized - user not found" });
     }
 
-    const userId = req.user?._id || req.user?._id?.toString();
+    const userId = req.user.id.toString();
+    console.log("userId:", userId);
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID in token" });
-    }
-
-    const userObjectId = new mongoose.Types.ObjectId(userId);
-
-    const events = await Event.find({ "tickets.userId": userObjectId });
+    const events = await Event.find({ "tickets.userId": userId });
 
     const tickets = [];
-
     events.forEach(event => {
       event.tickets.forEach(t => {
-        if (t.userId.toString() === userId) {
+        // Check that t.userId exists
+        if (t.userId && t.userId.toString() === userId) {
           tickets.push({
             _id: t._id,
             event: {
@@ -195,3 +189,4 @@ export const getMyTickets = async (req, res) => {
     res.status(500).json({ message: "Server error fetching tickets" });
   }
 };
+

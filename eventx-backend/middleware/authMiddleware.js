@@ -7,9 +7,11 @@ export const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      if (!req.user) return res.status(401).json({ message: "User not found" });
-      next();
+
+      // Only attach id + role, no DB call here
+      req.user = { id: decoded.id, role: decoded.role };
+
+      return next();
     } catch (error) {
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
@@ -18,6 +20,7 @@ export const protect = async (req, res, next) => {
     return res.status(401).json({ message: "Not authorized, no token" });
   }
 };
+
 
 // Add isAdmin here
 export const isAdmin = (req, res, next) => {

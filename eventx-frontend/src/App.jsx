@@ -5,6 +5,7 @@ import UserDashboard from "./pages/UserDashboard.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import MyTickets from "./pages/MyTickets.jsx";
+import EventDetails from "./pages/EventDetails.jsx";
 
 function App() {
   return (
@@ -30,6 +31,15 @@ function App() {
               <MyTickets />
             </ProtectedRoute>
         }
+      />
+         <Route
+          path="/event/:id"
+          element={
+            <ProtectedRoute role="user">
+              <EventDetails />
+            </ProtectedRoute>
+
+          }  
       />
 
         {/* Protected Admin Dashboard */}

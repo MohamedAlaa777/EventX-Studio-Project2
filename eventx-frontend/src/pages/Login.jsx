@@ -12,9 +12,9 @@ export default function Login() {
   try {
     const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
     const data = res.data;
-
+    console.log(data.user.id);
     localStorage.setItem("token", data.token);
-    localStorage.setItem("userId", data.user._id); // use data.user._id
+    localStorage.setItem("userId", data.user.id); // use data.user._id
     alert("Login successful!");
 
     const userRole = data.user.role;

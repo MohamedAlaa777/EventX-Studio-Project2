@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("upcoming"); // filter: upcoming | active | closed
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   const fetchEvents = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/events/upcoming", {
+    const { data } = await axios.get("http://localhost:5000/api/events", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setEvents(data);
@@ -17,11 +18,46 @@ export default function Events() {
 
   useEffect(() => { fetchEvents(); }, []);
 
-  const filtered = events.filter(ev => ev.title.toLowerCase().includes(search.toLowerCase()));
+  const today = new Date();
+  today.setHours(0,0,0,0); // normalize to midnight for date comparison
+
+  const filteredEvents = events
+    .filter(ev => {
+      const evDate = new Date(ev.date);
+      evDate.setHours(0,0,0,0);
+
+      if (filter === "upcoming") return evDate > today;
+      if (filter === "active") return evDate.getTime() === today.getTime();
+      if (filter === "closed") return evDate < today;
+      return true;
+    })
+    .filter(ev => ev.title.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Upcoming Events</h1>
+      <h1 className="text-3xl font-bold mb-4">Browse Events</h1>
+
+      <div className="flex gap-2 mb-4">
+        <button
+          className={`p-2 rounded ${filter === "upcoming" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          onClick={() => setFilter("upcoming")}
+        >
+          Upcoming
+        </button>
+        <button
+          className={`p-2 rounded ${filter === "active" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          onClick={() => setFilter("active")}
+        >
+          Active
+        </button>
+        <button
+          className={`p-2 rounded ${filter === "closed" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          onClick={() => setFilter("closed")}
+        >
+          Closed
+        </button>
+      </div>
+
       <input
         type="text"
         placeholder="Search events..."
@@ -31,20 +67,32 @@ export default function Events() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map(ev => (
-          <div key={ev._id} className="border p-4 rounded shadow">
-            <h2 className="text-xl font-bold">{ev.title}</h2>
-            <p>Date: {new Date(ev.date).toLocaleDateString()}</p>
-            <p>Venue: {ev.venue}</p>
-            <p>Seats available: {ev.seats - ev.bookedSeats}</p>
-            <button
-              className="bg-blue-500 text-white p-2 rounded mt-2"
-              onClick={() => navigate(`/event/${ev._id}`)}
+        {filteredEvents.map(ev => {
+          const evDate = new Date(ev.date);
+          evDate.setHours(0,0,0,0);
+          const isPast = evDate < today;
+
+          return (
+            <div
+              key={ev._id}
+              className={`border p-4 rounded shadow ${isPast ? "opacity-50" : ""}`}
             >
-              View Details
-            </button>
-          </div>
-        ))}
+              <h2 className="text-xl font-bold">{ev.title}</h2>
+              <p>Date: {new Date(ev.date).toLocaleDateString()}</p>
+              <p>Venue: {ev.venue}</p>
+              <p>Seats available: {ev.seats - ev.bookedSeats}</p>
+
+              {!isPast && (
+                <button
+                  className="bg-blue-500 text-white p-2 rounded mt-2"
+                  onClick={() => navigate(`/event/${ev._id}`)}
+                >
+                  View Details
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
