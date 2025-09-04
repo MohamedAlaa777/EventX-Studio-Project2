@@ -11,7 +11,7 @@ const app = express();
 
 // Allow only your frontend origin
 app.use(cors({
-  origin: 'https://event-x-studio-project2-6k572i7hm.vercel.app',
+  origin: 'https://event-x-studio-project2-azp7du4mv.vercel.app',
   credentials: true, // if you use cookies/auth headers
 }));
 app.use(express.json());
