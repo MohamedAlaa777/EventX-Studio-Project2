@@ -49,7 +49,7 @@ export default function EventDetails({ id: propId }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/events/book",
+        "https://eventx-studio-project2.onrender.com/api/events/book",
         { eventId: id, seatNumber: seatNum },
         { headers: { Authorization: `Bearer ${token}` } }
       );

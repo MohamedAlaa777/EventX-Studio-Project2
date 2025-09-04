@@ -122,7 +122,7 @@ export const getEventById = async (req, res) => {
 
 export const bookTicket = async (req, res) => {
   const { eventId, seatNumber } = req.body;
-  const userId = req.user?._id;
+  const userId = req.user?.id;
   console.log(userId);
   try {
     const event = await Event.findById(eventId);
@@ -136,7 +136,7 @@ export const bookTicket = async (req, res) => {
     const paymentSuccess = true; // replace with real payment gateway later
     if (!paymentSuccess) return res.status(400).json({ message: "Payment failed" });
 
-    const ticketInfo = { eventId, userId, seatNumber };
+    const ticketInfo = { eventId, seatNumber };
     const qrCode = await QRCode.toDataURL(JSON.stringify(ticketInfo));
 
     event.tickets.push({ seatNumber, userId, qrCode });
