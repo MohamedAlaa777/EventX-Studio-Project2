@@ -10,11 +10,7 @@ dotenv.config();
 const app = express();
 
 // Enable CORS
-app.use(cors({
-  origin: "https://event-x-studio-project2.vercel.app", // your frontend URL
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true
-}));
+app.use(cors()); // allow all origins temporarily for testing
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, {
