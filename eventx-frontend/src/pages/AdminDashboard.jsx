@@ -41,7 +41,7 @@ export default function AdminDashboard() {
   // Fetch events
   const fetchEvents = async () => {
     try {
-      const { data } = await axios.get("https://eventx-backend.onrender.com/api/events", {
+      const { data } = await axios.get("https://eventx-studio-project2.onrender.com/api/events", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(data);
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const { data } = await axios.get(
-        "https://eventx-backend.onrender.com/api/admin/analytics/summary",
+        "https://eventx-studio-project2.onrender.com/api/admin/analytics/summary",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setStats(data);
@@ -77,14 +77,14 @@ export default function AdminDashboard() {
     try {
       if (editId) {
         await axios.put(
-          `https://eventx-backend.onrender.com/api/events/${editId}`,
+          `https://eventx-studio-project2.onrender.com/api/events/${editId}`,
           { title, date, venue, price, seats },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setEditId(null);
       } else {
         await axios.post(
-          "https://eventx-backend.onrender.com/api/events",
+          "https://eventx-studio-project2.onrender.com/api/events",
           { title, date, venue, price, seats },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://eventx-backend.onrender.com/api/events/${id}`, {
+      await axios.delete(`https://eventx-studio-project2.onrender.com/api/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchEvents();
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
     console.log(userId);
   try {
     const { data } = await axios.post(
-      "https://eventx-backend.onrender.com/api/events/allocate-seat",
+      "https://eventx-studio-project2.onrender.com/api/events/allocate-seat",
       { eventId, userId }, // admin allocates for user
       {
         headers: {

@@ -11,7 +11,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://eventx-backend.onrender.com/api/auth/login",
+        "https://eventx-studio-project2.onrender.com/api/auth/login",
         { email, password }
       );
       const data = res.data;
