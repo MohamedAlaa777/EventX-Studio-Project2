@@ -6,7 +6,7 @@ export default function MyTickets() {
   const token = localStorage.getItem("token");
 
   const fetchTickets = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/events/my-tickets", {
+    const { data } = await axios.get("https://eventx-backend.onrender.com/api/events/my-tickets", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setTickets(data);

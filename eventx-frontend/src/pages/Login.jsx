@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
@@ -8,23 +8,26 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-    const data = res.data;
-    console.log(data.user.id);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("userId", data.user.id); // use data.user._id
-    alert("Login successful!");
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "https://eventx-backend.onrender.com/api/auth/login",
+        { email, password }
+      );
+      const data = res.data;
+      console.log(data.user.id);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.user.id); // use data.user._id
+      alert("Login successful!");
 
-    const userRole = data.user.role;
-    if (userRole === "admin") navigate("/admin");
-    else navigate("/user");
-  } catch (err) {
-    console.error("Login error:", err.response?.data || err.message);
-    alert(err.response?.data?.message || "Login failed");
-  }
-};
+      const userRole = data.user.role;
+      if (userRole === "admin") navigate("/admin");
+      else navigate("/user");
+    } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -52,6 +55,14 @@ export default function Login() {
         <button className="bg-blue-500 text-white p-2 w-full rounded">
           Login
         </button>
+
+        {/* Link to Register page */}
+        <p className="text-center mt-4 text-sm">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-500 underline">
+            Register here
+          </Link>
+        </p>
       </form>
     </div>
   );

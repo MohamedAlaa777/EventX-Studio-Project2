@@ -9,7 +9,7 @@ export default function UpcomingNotifications() {
   // Fetch events once
   const fetchEvents = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/events", {
+      const { data } = await axios.get("https://eventx-backend.onrender.com/api/events", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(data);

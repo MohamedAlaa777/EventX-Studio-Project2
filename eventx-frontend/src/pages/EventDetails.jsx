@@ -12,7 +12,7 @@ export default function EventDetails({ id: propId }) {
   const token = localStorage.getItem("token");
 
   const fetchEvent = async () => {
-    const { data } = await axios.get(`http://localhost:5000/api/events/${id}`, {
+    const { data } = await axios.get(`https://eventx-backend.onrender.com/api/events/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setEvent(data);

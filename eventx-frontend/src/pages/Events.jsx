@@ -10,7 +10,7 @@ export default function Events() {
   const navigate = useNavigate();
 
   const fetchEvents = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/events", {
+    const { data } = await axios.get("https://eventx-backend.onrender.com/api/events", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setEvents(data);
