@@ -11,6 +11,8 @@ const app = express();
 
 // Enable CORS
 app.use(cors()); // allow all origins temporarily for testing
+// Handle preflight requests
+app.options("*", cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, {
