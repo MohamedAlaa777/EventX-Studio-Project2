@@ -9,7 +9,12 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// Enable CORS
+app.use(cors({
+  origin: "https://event-x-studio-project2.vercel.app", // your frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true
+}));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, {
